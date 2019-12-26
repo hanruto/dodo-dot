@@ -5,19 +5,22 @@ element.height = window.innerHeight
 element.style.left = '0px'
 element.style.top = '0px'
 
+const image = new Image()
+image.src = './test.jpg'
+
 const dodot = window.dodot
-const panel = dodot.createPanel(element)
-const dots = dodot.createDotsFromText('Hello World')
-const newDots = dodot.createDotsFromText('ByeBye World')
-const sleep = delay => new Promise(resolve => setTimeout(resolve, delay))
+dodot.createPanel(element)
 
-panel.drawDots(dots)
+const sleep = (time) => new Promise(resolve => setTimeout(resolve, time))
 
-const animation = dodot.createDotsAnimation(dots, newDots)
+image.onload = async () => {
+  const dots = dodot.createDotsFromImage(image, { imageWidth: 300, imageHeight: 300 })
+  const animation = dodot.createDotsAnimation([], dots)
 
-async function animate() {
+  await animation.run()
   await sleep(1000)
-  animation.run()
-}
 
-animate()
+  const newDots = dodot.createDotsFromText('I am a Dog')
+  const newAnimation = dodot.createDotsAnimation(dots, newDots)
+  await newAnimation.run()
+}

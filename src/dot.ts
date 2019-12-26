@@ -4,8 +4,10 @@
 import global from './global'
 import { transformColorObjectToColor, transformColorToColorObject } from './utils'
 import { ColorObject, DotInfo } from './interfaces'
+import { SupplementType } from './constants'
 import { withStashPanelData, shuffle, randomNumber } from './utils'
 
+const defaultDotRadius = 6
 const transparentColor = { r: 0, g: 0, b: 0, a: 0 }
 
 export default class Dot {
@@ -140,8 +142,8 @@ const getDataFromImage = (image: HTMLImageElement, options: CreateImageDotsOptio
 
   panel.drawImage(
     image,
-    panel.width / 2 + translateX,
-    panel.height / 2 + translateY,
+    panel.width / 2 + translateX - imageWidth / 2,
+    panel.height / 2 + translateY - imageHeight / 2,
     imageWidth,
     imageHeight,
   )
@@ -182,7 +184,7 @@ export const createRandomDot = (options?: CreateRandomDotOptions) => {
   const panel = global.panel!
   const {
     color: initColor = transparentColor,
-    radius: initRadius = 4,
+    radius: initRadius = defaultDotRadius,
     xRange = { min: -panel.width, max: 2 * panel.width },
     yRange = { min: -panel.height, max: 2 * panel.height },
     zRange = { min: -global.perspective, max: global.perspective }
@@ -217,14 +219,31 @@ function getLimitFromDots(dots: Dot[]) {
   return { maxX, maxY, minX, minY }
 }
 
-export function supplementDots(dots: Dot[], number: number) {
-  const { maxX, maxY, minX, minY } = getLimitFromDots(dots)
+export function supplementDots(dots: Dot[], number: number, type: SupplementType) {
+  if(type !== SupplementType.CLONE){
+    const panel = global.panel!
+    const isConvergence = type === SupplementType.CONVERGENCE
+    const limit = getLimitFromDots(dots)
+    const maxX = isConvergence ? limit.maxX : 2 * panel.width
+    const minX = isConvergence ? limit.minX : -1 * panel.width
+    const maxY = isConvergence ? limit.maxY : 2 * panel.height
+    const minY = isConvergence ? limit.minY : -1 * panel.height
 
-  const newDots = createRandomDots(number, {
-    xRange: { max: maxX, min: minX },
-    yRange: { max: maxY, min: minY },
-    zRange: { max: 0, min: 0 },
-  })
+    const newDots = createRandomDots(number, {
+      xRange: { max: maxX, min: minX },
+      yRange: { max: maxY, min: minY },
+      zRange: { max: 0, min: 0 },
+    })
+  
+    return dots.concat(newDots)
+  } else {
+    const newDots: Dot[] = []
+    const length = dots.length
 
-  return dots.concat(newDots)
+    for(let i = 0; i < number; i++){
+      newDots.push(dots[randomNumber(0, length)])
+    }
+  
+    return dots.concat(newDots)
+  }
 }

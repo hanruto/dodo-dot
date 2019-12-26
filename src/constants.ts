@@ -23,3 +23,9 @@ export enum TweenType {
   Back = 'Back',
   Bounce = 'Bounce'
 }
+
+export enum SupplementType {
+  DIVERGENCE = 'divergence',
+  CONVERGENCE = 'convergence',
+  CLONE = 'clone',
+}

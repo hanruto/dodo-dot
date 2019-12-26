@@ -3,15 +3,15 @@
  */
 import Tween from './tween'
 import Dot, { supplementDots, createRandomDots } from './dot'
-import { TweenType, AnimationStatusEnum } from './constants'
+import { TweenType, AnimationStatusEnum, SupplementType } from './constants'
 import global from './global'
 
 
-export const createDotsAnimation = (fromDots: Dot[], toDots: Dot[]) => {
+export const createDotsAnimation = (fromDots: Dot[], toDots: Dot[] = []) => {
   const defaultTweenType = TweenType.Sine
   const tweenFn = Tween[defaultTweenType].easeOut
   const linearFn = Tween.Linear
-  const totalFrame = 100
+  const totalFrame = 60
   const panel = global.panel!
 
   // 补充策略
@@ -26,11 +26,11 @@ export const createDotsAnimation = (fromDots: Dot[], toDots: Dot[]) => {
   }
 
   if (fromDots.length && fromDots.length < dotsCount) {
-    fromDots = supplementDots(fromDots, dotsCount - fromDots.length)
+    fromDots = supplementDots(fromDots, dotsCount - fromDots.length, SupplementType.CLONE)
   }
 
   if (toDots.length && toDots.length < dotsCount) {
-    toDots = supplementDots(toDots, dotsCount - toDots.length)
+    toDots = supplementDots(toDots, dotsCount - toDots.length, SupplementType.CLONE)
   }
 
   // 动画策略
@@ -39,49 +39,53 @@ export const createDotsAnimation = (fromDots: Dot[], toDots: Dot[]) => {
   let timer = 0
 
   const animate = () => {
-    const loop = () => {
-      if (currentStatus === AnimationStatusEnum.STOP) {
-        cancelAnimationFrame(timer)
-        return
-      }
-
-      const currentDots: Dot[] = []
-
-      for (let i = 0; i < dotsCount; i++) {
-        const toDot = toDots[i]
-        const fromDot = fromDots[i]
-        const { x: fromX, y: fromY, z: fromZ, color: fromColor, radius: fromRadius } = fromDot
-        const { x: toX, y: toY, z: toZ, color: toColor, radius: toRadius } = toDot
-        const x = tweenFn(currentFrame, fromX, toX - fromX, totalFrame)
-        const y = tweenFn(currentFrame, fromY, toY - fromY, totalFrame)
-        const z = tweenFn(currentFrame, fromZ, toZ - fromZ, totalFrame)
-        const color = {
-          r: linearFn(currentFrame, fromColor.r, toColor.r - fromColor.r, totalFrame),
-          g: linearFn(currentFrame, fromColor.g, toColor.g - fromColor.g, totalFrame),
-          b: linearFn(currentFrame, fromColor.b, toColor.b - fromColor.b, totalFrame),
-          a: linearFn(currentFrame, fromColor.a, toColor.a - fromColor.a, totalFrame)
+    return new Promise(resolve => {
+      const loop = () => {
+        if (currentStatus === AnimationStatusEnum.STOP) {
+          cancelAnimationFrame(timer)
+          return
         }
-        const radius = linearFn(currentFrame, fromRadius, toRadius - fromRadius, totalFrame)
 
-        currentDots.push(new Dot({ x, y, z, color, radius }))
+        const currentDots: Dot[] = []
+
+        for (let i = 0; i < dotsCount; i++) {
+          const toDot = toDots[i]
+          const fromDot = fromDots[i]
+          const { x: fromX, y: fromY, z: fromZ, color: fromColor, radius: fromRadius } = fromDot
+          const { x: toX, y: toY, z: toZ, color: toColor, radius: toRadius } = toDot
+          const x = tweenFn(currentFrame, fromX, toX - fromX, totalFrame)
+          const y = tweenFn(currentFrame, fromY, toY - fromY, totalFrame)
+          const z = tweenFn(currentFrame, fromZ, toZ - fromZ, totalFrame)
+          const color = {
+            r: linearFn(currentFrame, fromColor.r, toColor.r - fromColor.r, totalFrame),
+            g: linearFn(currentFrame, fromColor.g, toColor.g - fromColor.g, totalFrame),
+            b: linearFn(currentFrame, fromColor.b, toColor.b - fromColor.b, totalFrame),
+            a: linearFn(currentFrame, fromColor.a, toColor.a - fromColor.a, totalFrame)
+          }
+          const radius = linearFn(currentFrame, fromRadius, toRadius - fromRadius, totalFrame)
+
+          currentDots.push(new Dot({ x, y, z, color, radius }))
+        }
+
+        panel.clear()
+        panel.drawDots(currentDots)
+
+        if (currentFrame < totalFrame) {
+          currentFrame++
+          timer = requestAnimationFrame(loop)
+        } else {
+          resolve()
+        }
       }
 
-      panel.clear()
-      panel.drawDots(currentDots)
-
-      if (currentFrame < totalFrame) {
-        currentFrame++
-        timer = requestAnimationFrame(loop)
-      }
-    }
-
-    loop()
+      loop()
+    })
   }
 
   const runAnimation = () => {
     currentFrame = 0
     currentStatus = AnimationStatusEnum.RUN
-    animate()
+    return animate()
   }
 
   const stopAnimation = () => {
@@ -90,7 +94,7 @@ export const createDotsAnimation = (fromDots: Dot[], toDots: Dot[]) => {
 
   const continueAnimation = () => {
     currentStatus = AnimationStatusEnum.RUN
-    animate()
+    return animate()
   }
 
   return {
