@@ -57,12 +57,14 @@ interface CreateTextDotsOptions {
   translateZ?: number
 }
 
-interface GenerateDotsOptions {
-  data: ImageData
+interface CreateImageDotsOptions {
   dotRadius?: number
   dotMargin?: number
+  imageWidth?: number
+  imageHeight?: number
   translateX?: number
   translateY?: number
+  translateZ?: number
 }
 
 interface GenerateDotsOptions {
@@ -73,7 +75,7 @@ interface GenerateDotsOptions {
   translateY?: number
 }
 
-export const generateDots = (options: GenerateDotsOptions) => {
+const generateDots = (options: GenerateDotsOptions) => {
   const { dotRadius = 3, data: imageData, dotMargin = 0 } = options
   const dots: Dot[] = []
 
@@ -96,7 +98,7 @@ export const generateDots = (options: GenerateDotsOptions) => {
   return shuffle(dots)
 }
 
-export const getTextData = (text: string, options: CreateTextDotsOptions) => {
+const getDataFromText = (text: string, options: CreateTextDotsOptions) => {
   const panel = global.panel!
 
   panel.clear()
@@ -124,17 +126,48 @@ export const getTextData = (text: string, options: CreateTextDotsOptions) => {
   return imageData
 }
 
+const getDataFromImage = (image: HTMLImageElement, options: CreateImageDotsOptions) => {
+  const panel = global.panel!
+
+  panel.clear()
+
+  const {
+    imageWidth = image.width,
+    imageHeight = image.height,
+    translateX = 0,
+    translateY = 0,
+  } = options || {}
+
+  panel.drawImage(
+    image,
+    panel.width / 2 + translateX,
+    panel.height / 2 + translateY,
+    imageWidth,
+    imageHeight,
+  )
+
+  const imageData = panel.ctx.getImageData(0, 0, panel.width, panel.height)
+
+  panel.clear()
+
+  return imageData
+}
+
 export const createDotsFromText = (text: string, options: CreateTextDotsOptions): Dot[] => {
   return withStashPanelData(() => {
     const { dotRadius, dotMargin } = options || {}
-    const data = getTextData(text, options)
+    const data = getDataFromText(text, options)
 
     return generateDots({ dotRadius, dotMargin, data })
   })
 }
 
-export const createDotsFromImage = () => {
-
+export const createDotsFromImage = (image: HTMLImageElement, options: CreateImageDotsOptions): Dot[] => {
+  return withStashPanelData(() => {
+    const { dotRadius, dotMargin } = options
+    const imageData = getDataFromImage(image, options)
+    return generateDots({ dotRadius, dotMargin, data: imageData })
+  })
 }
 
 interface CreateRandomDotOptions {
