@@ -78,7 +78,7 @@ export const createDotsAnimation = (fromDots: Dot[], toDots: Dot[]) => {
     loop()
   }
 
-  const startAnimation = () => {
+  const runAnimation = () => {
     currentFrame = 0
     currentStatus = AnimationStatusEnum.RUN
     animate()
@@ -94,7 +94,7 @@ export const createDotsAnimation = (fromDots: Dot[], toDots: Dot[]) => {
   }
 
   return {
-    start: startAnimation,
+    run: runAnimation,
     stop: stopAnimation,
     continue: continueAnimation,
   }
