@@ -1,3 +1,7 @@
+/**
+ * 通用接口类型
+ */
+
 export interface ColorObject {
   r: number
   g: number

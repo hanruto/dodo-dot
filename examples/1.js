@@ -7,14 +7,24 @@ element.style.top = '0px'
 
 const dodot = window.dodot
 
-dodot.createPanel(element)
+const panel = dodot.createPanel(element)
+const dots = dodot.createDotsFromText('Hello World')
+const newDots = dodot.createDotsFromText('ByeBye World')
 
-const dots = dodot.createDotsFromText('hello world')
+panel.drawDots(dots)
 
-dodot.paintDots(dots)
+// const animation = dodot.createDotsAnimation([], newDots)
 
-const randomDots = dodot.createRandomDots(dots.length)
+const animation = dodot.createDotsAnimation(dots, newDots)
 
-const animation = dodot.createDotsAnimation(dots, randomDots)
+const sleep = delay => new Promise(resolve => setTimeout(resolve, delay))
 
-animation.start()
+async function animate() {
+  animation.start()
+}
+
+async function animate() {
+  animation.start()
+}
+
+animate()

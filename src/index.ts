@@ -6,7 +6,6 @@ import {
   createRandomDots,
   createDotsFromText,
   createDotsFromImage,
-  paintDots,
 } from './dot'
 import { createDotsAnimation } from './animation'
 
@@ -19,10 +18,9 @@ const dodot = {
   createDotsFromText,
   createDotsFromImage,
   createDotsAnimation,
-  paintDots,
 }
 
 // @ts-ignore
-window.dodot = dodot 
+window.dodot = dodot
 
 export default dodot

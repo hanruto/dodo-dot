@@ -1,4 +1,9 @@
+/**
+ * 工具方法
+ */
+
 import global from './global'
+import { ColorObject } from 'interfaces'
 
 export function randomNumber(start: number, end: number) {
   const i = end - start
@@ -6,7 +11,7 @@ export function randomNumber(start: number, end: number) {
   return number
 }
 
-export function showFps(){
+export function showFps() {
   let frameCount = 0
 
   const element = document.createElement('span')
@@ -34,8 +39,8 @@ export function showFps(){
   }, calcInterval)
 }
 
-export function shuffle<T extends any>(arr: Array<T>): Array<T>{
-  const newArr:Array<T> = arr.map(item => item)
+export function shuffle<T extends any>(arr: Array<T>): Array<T> {
+  const newArr: Array<T> = arr.map(item => item)
   const len = newArr.length
 
   newArr.forEach((item, index) => {
@@ -47,10 +52,19 @@ export function shuffle<T extends any>(arr: Array<T>): Array<T>{
   return newArr
 }
 
-export function transformColorObjectToColor(colorObject){
+export function transformColorObjectToColor(colorObject) {
   const { r, g, b, a } = colorObject
   const alpha = (a / 255).toFixed(2)
   return `rgba(${r}, ${g}, ${b}, ${alpha})`
+}
+
+export function transformColorToColorObject(color: string): ColorObject {
+  const r = 0
+  const g = 0
+  const b = 0
+  const a = 0
+
+  return { r, g, b, a }
 }
 
 export const withStashPanelData = (fn: Function) => {

@@ -1,14 +1,9 @@
-export enum DirectionEnum {
-  LEAVE = 'leave',
-  ENTER = 'enter',
-}
-
-export enum  StatusEnum {
-  START = 'start',
+/**
+ * 保存常量和枚举
+ */
+export enum AnimationStatusEnum {
+  RUN = 'run',
   STOP = 'stop',
-  CONTINUE = 'continue',
-  END = 'end',
-  TRANSFORM = 'transform'
 }
 
 export enum RenderType {
@@ -24,7 +19,7 @@ export enum TweenType {
   Sine = 'Sine',
   Expo = 'Expo',
   Circ = 'Circ',
-  Elastic =  'Elastic',
+  Elastic = 'Elastic',
   Back = 'Back',
   Bounce = 'Bounce'
 }

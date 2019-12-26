@@ -1,35 +1,40 @@
+/**
+ * 粒子生成
+ */
 import global from './global'
-import { transformColorObjectToColor } from './utils'
+import { transformColorObjectToColor, transformColorToColorObject } from './utils'
 import { ColorObject, DotInfo } from './interfaces'
-import { withStashPanelData, shuffle } from './utils'
+import { withStashPanelData, shuffle, randomNumber } from './utils'
 
-export default class Dot{
+const transparentColor = { r: 0, g: 0, b: 0, a: 0 }
+
+export default class Dot {
   x: number
   y: number
   z: number
-  color: string | ColorObject
+  color: ColorObject
   radius: number
 
-  constructor(dotInfo: DotInfo){
-    const {x, y, z, color, radius} = dotInfo
+  constructor(dotInfo: DotInfo) {
+    const { x, y, z, color, radius } = dotInfo
     this.x = x
     this.y = y
     this.z = z
-    this.color = color
+    this.color = typeof color === 'string' ? transformColorToColorObject(color) : color
     this.radius = radius
   }
 
   paint = () => {
     const { perspective, panel } = global
 
-    if(!panel) return new Error('Please init panel before paint dot.')
+    if (!panel) return new Error('Please init panel before paint dot.')
 
     const color = typeof this.color === 'string' ? this.color : transformColorObjectToColor(this.color)
     const scale = Number((perspective / (perspective + this.z)).toFixed(2))
 
     this.x = parseInt(Math.abs(panel.width / 2 + (this.x - panel.width / 2) * scale).toString(), 10)
     this.y = parseInt(Math.abs(panel.height / 2 + (this.y - panel.height / 2) * scale).toString(), 10)
-    
+
     panel.drawBall(this.x, this.y, this.radius * scale, color)
   }
 }
@@ -53,7 +58,15 @@ interface CreateTextDotsOptions {
 }
 
 interface GenerateDotsOptions {
-  imageData: ImageData
+  data: ImageData
+  dotRadius?: number
+  dotMargin?: number
+  translateX?: number
+  translateY?: number
+}
+
+interface GenerateDotsOptions {
+  data: ImageData
   dotRadius?: number
   dotMargin?: number
   translateX?: number
@@ -61,7 +74,7 @@ interface GenerateDotsOptions {
 }
 
 export const generateDots = (options: GenerateDotsOptions) => {
-  const { dotRadius = 3, imageData, dotMargin = 0 } = options
+  const { dotRadius = 3, data: imageData, dotMargin = 0 } = options
   const dots: Dot[] = []
 
   const interval = (dotRadius + dotMargin) * 2
@@ -72,7 +85,7 @@ export const generateDots = (options: GenerateDotsOptions) => {
       const g = imageData.data[i - 2]
       const b = imageData.data[i - 1]
       const a = imageData.data[i]
-      const dotInfo = { x, y, z: 0, color: {r, g, b, a}, radius: dotRadius }
+      const dotInfo = { x, y, z: 0, color: { r, g, b, a }, radius: dotRadius }
 
       if (imageData.data[i] >= 128) {
         dots.push(new Dot(dotInfo))
@@ -89,12 +102,12 @@ export const getTextData = (text: string, options: CreateTextDotsOptions) => {
   panel.clear()
 
   const {
-    fontSize = 150, 
+    fontSize = 150,
     fontColor = '#666',
     translateX = 0,
     translateY = 0,
-    } = options || {}
-  
+  } = options || {}
+
   panel.drawText(
     text,
     panel.width / 2 + translateX,
@@ -114,9 +127,9 @@ export const getTextData = (text: string, options: CreateTextDotsOptions) => {
 export const createDotsFromText = (text: string, options: CreateTextDotsOptions): Dot[] => {
   return withStashPanelData(() => {
     const { dotRadius, dotMargin } = options || {}
-    const imageData = getTextData(text, options)
-  
-    return generateDots({ dotRadius, dotMargin, imageData })
+    const data = getTextData(text, options)
+
+    return generateDots({ dotRadius, dotMargin, data })
   })
 }
 
@@ -124,14 +137,61 @@ export const createDotsFromImage = () => {
 
 }
 
-export const createRandomDot = () => {
-
+interface CreateRandomDotOptions {
+  radius?: number
+  color?: ColorObject
+  xRange?: { max: number, min: number }
+  yRange?: { max: number, min: number }
+  zRange?: { max: number, min: number }
 }
 
-export const createRandomDots = () => {
+export const createRandomDot = (options?: CreateRandomDotOptions) => {
+  const panel = global.panel!
+  const {
+    color: initColor = transparentColor,
+    radius: initRadius = 4,
+    xRange = { min: -panel.width, max: 2 * panel.width },
+    yRange = { min: -panel.height, max: 2 * panel.height },
+    zRange = { min: -global.perspective, max: global.perspective }
+  } = options || {}
+  const x = randomNumber(xRange.min, xRange.max)
+  const y = randomNumber(yRange.min, yRange.max)
+  const z = randomNumber(zRange.min, zRange.max)
+  const color = initColor
+  const radius = randomNumber(initRadius / 2, initRadius * 2)
+  const dotInfo = { x, y, z, color, radius }
 
+  return new Dot(dotInfo)
 }
 
-export const paintDots = (dots: Dot[]) => {
-  dots.forEach(dot => dot.paint())
+export const createRandomDots = (dotNumber, options?: CreateRandomDotOptions) => {
+  return Array.from({ length: dotNumber }).map(() => createRandomDot(options))
+}
+
+function getLimitFromDots(dots: Dot[]) {
+  let maxX = Number.NEGATIVE_INFINITY
+  let maxY = Number.NEGATIVE_INFINITY
+  let minX = Number.POSITIVE_INFINITY
+  let minY = Number.POSITIVE_INFINITY
+
+  dots.forEach(dot => {
+    dot.x > maxX && (maxX = dot.x)
+    dot.y > maxY && (maxY = dot.y)
+    dot.x < minX && (minX = dot.x)
+    dot.y < minY && (minY = dot.y)
+  })
+
+  return { maxX, maxY, minX, minY }
+}
+
+export function supplementDots(dots: Dot[], number: number) {
+  const { maxX, maxY, minX, minY } = getLimitFromDots(dots)
+
+  const newDots = createRandomDots(number, {
+    xRange: { max: maxX, min: minX },
+    yRange: { max: maxY, min: minY },
+    zRange: { max: 0, min: 0 },
+  })
+
+  return dots.concat(newDots)
 }
