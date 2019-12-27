@@ -90,7 +90,7 @@ const Tween = {
     }
   },
   Elastic: {
-    easeIn: function (t, b, c, d, a, p) {
+    easeIn: function (t, b, c, d, a?, p?) {
       var s
       if (t == 0) return b
       if ((t /= d) == 1) return b + c
@@ -109,7 +109,7 @@ const Tween = {
         ) + b
       )
     },
-    easeOut: function (t, b, c, d, a, p) {
+    easeOut: function (t, b, c, d, a?, p?) {
       var s
       if (t == 0) return b
       if ((t /= d) == 1) return b + c
@@ -126,7 +126,7 @@ const Tween = {
         b
       )
     },
-    easeInOut: function (t, b, c, d, a, p) {
+    easeInOut: function (t, b, c, d, a?, p?) {
       var s
       if (t == 0) return b
       if ((t /= d / 2) == 2) return b + c
@@ -156,15 +156,15 @@ const Tween = {
     }
   },
   Back: {
-    easeIn: function (t, b, c, d, s) {
+    easeIn: function (t, b, c, d, s?) {
       if (typeof s == 'undefined') s = 1.70158
       return c * (t /= d) * t * ((s + 1) * t - s) + b
     },
-    easeOut: function (t, b, c, d, s) {
+    easeOut: function (t, b, c, d, s?) {
       if (typeof s == 'undefined') s = 1.70158
       return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b
     },
-    easeInOut: function (t, b, c, d, s) {
+    easeInOut: function (t, b, c, d, s?) {
       if (typeof s == 'undefined') s = 1.70158
       if ((t /= d / 2) < 1)
         return (c / 2) * (t * t * (((s *= 1.525) + 1) * t - s)) + b

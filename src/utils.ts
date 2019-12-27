@@ -82,3 +82,5 @@ export const withStashPanelData = (fn: Function) => {
 
   return result
 }
+
+export const sleep = (time) => new Promise(resolve => setTimeout(resolve, time))

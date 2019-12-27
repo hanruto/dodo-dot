@@ -7,7 +7,11 @@ import {
   createDotsFromText,
   createDotsFromImage,
 } from './dot'
-import { createDotsAnimation } from './animation'
+import { 
+  createDotsAnimation,
+  createMutiSegmentDotsAnimation,
+} from './animation'
+import * as utils from './utils'
 
 const dodot = {
   createPanel,
@@ -18,6 +22,8 @@ const dodot = {
   createDotsFromText,
   createDotsFromImage,
   createDotsAnimation,
+  createMutiSegmentDotsAnimation,
+  utils,
 }
 
 // @ts-ignore

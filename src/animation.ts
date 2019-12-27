@@ -5,14 +5,23 @@ import Tween from './tween'
 import Dot, { supplementDots, createRandomDots } from './dot'
 import { TweenType, AnimationStatusEnum, SupplementType } from './constants'
 import global from './global'
+import { sleep } from './utils'
 
 
-export const createDotsAnimation = (fromDots: Dot[], toDots: Dot[] = []) => {
-  const defaultTweenType = TweenType.Sine
-  const tweenFn = Tween[defaultTweenType].easeOut
+interface Options {
+  supplementType?: SupplementType
+  tweenType?: TweenType
+  delay?: number
+}
+
+export const createDotsAnimation = (fromDots: Dot[], toDots: Dot[] = [], options: Options = {}) => {
+  const tweenType = options.tweenType || TweenType.Sine
+  const tweenFn = Tween[tweenType].easeOut
   const linearFn = Tween.Linear
   const totalFrame = 60
   const panel = global.panel!
+  const supplementType = options.supplementType || SupplementType.CONVERGENCE
+  const delay = options.delay || 0
 
   // 补充策略
   const dotsCount = Math.max(fromDots.length, toDots.length)
@@ -26,11 +35,11 @@ export const createDotsAnimation = (fromDots: Dot[], toDots: Dot[] = []) => {
   }
 
   if (fromDots.length && fromDots.length < dotsCount) {
-    fromDots = supplementDots(fromDots, dotsCount - fromDots.length, SupplementType.CLONE)
+    fromDots = supplementDots(fromDots, dotsCount - fromDots.length, supplementType)
   }
 
   if (toDots.length && toDots.length < dotsCount) {
-    toDots = supplementDots(toDots, dotsCount - toDots.length, SupplementType.CLONE)
+    toDots = supplementDots(toDots, dotsCount - toDots.length, supplementType)
   }
 
   // 动画策略
@@ -38,8 +47,16 @@ export const createDotsAnimation = (fromDots: Dot[], toDots: Dot[] = []) => {
   let currentStatus = AnimationStatusEnum.STOP
   let timer = 0
 
-  const animate = () => {
-    return new Promise(resolve => {
+  const animate = async () => {
+    panel.clear()
+
+    panel.drawDots(fromDots)
+    
+    if(delay > 0) {
+      await sleep(delay)
+    }
+
+    return await new Promise(resolve => {
       const loop = () => {
         if (currentStatus === AnimationStatusEnum.STOP) {
           cancelAnimationFrame(timer)
@@ -97,6 +114,39 @@ export const createDotsAnimation = (fromDots: Dot[], toDots: Dot[] = []) => {
     return animate()
   }
 
+  return {
+    run: runAnimation,
+    stop: stopAnimation,
+    continue: continueAnimation,
+  }
+}
+
+
+export const createMutiSegmentDotsAnimation = (dotsArr: Dot[][], options: Options) => {
+  let currentAnimation
+  let currentIndex = 0
+
+  const runAnimation = async () => {
+    for (let i = 0; i < dotsArr.length - 1; i++) {
+      currentIndex = i
+      currentAnimation = createDotsAnimation(dotsArr[i], dotsArr[i+1], options)
+      await currentAnimation.run()
+    }
+  }
+
+  const stopAnimation = () => {
+    currentAnimation.stop()
+  }
+
+  const continueAnimation = async () => {
+    await currentAnimation.continue()
+    for (let i = currentIndex + 1; i < dotsArr.length - 1; i++) {
+      currentIndex = i
+      currentAnimation = createDotsAnimation(dotsArr[i], dotsArr[i+1], options)
+      await currentAnimation.run()
+    }
+  }
+  
   return {
     run: runAnimation,
     stop: stopAnimation,
