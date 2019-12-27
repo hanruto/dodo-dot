@@ -50,8 +50,8 @@ export const createDots = (dataInfoArr: DotInfo[]) => {
 }
 
 interface CreateTextDotsOptions {
-  dotRadius?: number
-  dotMargin?: number
+  radius?: number
+  margin?: number
   fontSize?: number
   fontColor?: string
   translateX?: number
@@ -60,8 +60,8 @@ interface CreateTextDotsOptions {
 }
 
 interface CreateImageDotsOptions {
-  dotRadius?: number
-  dotMargin?: number
+  radius?: number
+  margin?: number
   imageWidth?: number
   imageHeight?: number
   translateX?: number
@@ -71,17 +71,17 @@ interface CreateImageDotsOptions {
 
 interface GenerateDotsOptions {
   data: ImageData
-  dotRadius?: number
-  dotMargin?: number
+  radius?: number
+  margin?: number
   translateX?: number
   translateY?: number
 }
 
 const generateDots = (options: GenerateDotsOptions) => {
-  const { dotRadius = 3, data: imageData, dotMargin = 0 } = options
+  const { radius = 3, data: imageData, margin = 0 } = options
   const dots: Dot[] = []
 
-  const interval = (dotRadius + dotMargin) * 2
+  const interval = (radius + margin) * 2
   for (let x = 0; x < imageData.width; x += interval) {
     for (let y = 0; y < imageData.height; y += interval) {
       const i = (y * imageData.width + x) * 4 - 1
@@ -89,7 +89,7 @@ const generateDots = (options: GenerateDotsOptions) => {
       const g = imageData.data[i - 2]
       const b = imageData.data[i - 1]
       const a = imageData.data[i]
-      const dotInfo = { x, y, z: 0, color: { r, g, b, a }, radius: dotRadius }
+      const dotInfo = { x, y, z: 0, color: { r, g, b, a }, radius }
 
       if (imageData.data[i] >= 128) {
         dots.push(new Dot(dotInfo))
@@ -157,18 +157,18 @@ const getDataFromImage = (image: HTMLImageElement, options: CreateImageDotsOptio
 
 export const createDotsFromText = (text: string, options: CreateTextDotsOptions): Dot[] => {
   return withStashPanelData(() => {
-    const { dotRadius, dotMargin } = options || {}
+    const { radius, margin } = options || {}
     const data = getDataFromText(text, options)
 
-    return generateDots({ dotRadius, dotMargin, data })
+    return generateDots({ radius, margin, data })
   })
 }
 
 export const createDotsFromImage = (image: HTMLImageElement, options: CreateImageDotsOptions): Dot[] => {
   return withStashPanelData(() => {
-    const { dotRadius, dotMargin } = options
+    const { radius, margin } = options
     const imageData = getDataFromImage(image, options)
-    return generateDots({ dotRadius, dotMargin, data: imageData })
+    return generateDots({ radius, margin, data: imageData })
   })
 }
 
@@ -220,7 +220,7 @@ function getLimitFromDots(dots: Dot[]) {
 }
 
 export function supplementDots(dots: Dot[], number: number, type: SupplementType) {
-  if(type !== SupplementType.CLONE){
+  if (type !== SupplementType.CLONE) {
     const panel = global.panel!
     const isConvergence = type === SupplementType.CONVERGENCE
     const limit = getLimitFromDots(dots)
@@ -234,16 +234,16 @@ export function supplementDots(dots: Dot[], number: number, type: SupplementType
       yRange: { max: maxY, min: minY },
       zRange: { max: 0, min: 0 },
     })
-  
+
     return dots.concat(newDots)
   } else {
     const newDots: Dot[] = []
     const length = dots.length
 
-    for(let i = 0; i < number; i++){
+    for (let i = 0; i < number; i++) {
       newDots.push(dots[randomNumber(0, length)])
     }
-  
+
     return dots.concat(newDots)
   }
 }
