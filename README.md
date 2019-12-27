@@ -12,9 +12,9 @@ animation.start()
 同理给定一组点可以到另外一组点以特定的函数运动
 
 ``` js
-const dot = [{ x: 0, y: 0 }, { x: 0, y: 10 }, { x: 0, y: 20 }]
-const newDot = [{ x: 100, y: 100 }, { x: 100, y: 110 }, { x: 100, y: 120 }]
-const animation = createDotsAnimation(dot, newDot)
+const fromDots = [{ x: 0, y: 0 }, { x: 0, y: 10 }, { x: 0, y: 20 }]
+const toDots = [{ x: 100, y: 100 }, { x: 100, y: 110 }, { x: 100, y: 120 }]
+const animation = createDotsAnimation(fromDots, toDots)
 animation.start()
 ```
 
