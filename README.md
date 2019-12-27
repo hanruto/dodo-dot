@@ -24,7 +24,12 @@ dodot 就是控制一些点朝着另外一些点进行变化的一个工具
 
 ### API
 
-可以通过以下的API创建点
+在创建点和动画之前需要先制定一个canvas元素
+``` js
+const panel = createPanel(canvas)
+```
+
+通过以下的API创建各种各样的点
 ``` js
 createDot
 createDots
