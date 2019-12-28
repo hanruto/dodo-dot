@@ -59,12 +59,43 @@ export function transformColorObjectToColor(colorObject) {
 }
 
 export function transformColorToColorObject(color: string): ColorObject {
-  const r = 0
-  const g = 0
-  const b = 0
-  const a = 0
+  const hexReg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/
+  const rgbaReg = /^rgba\((?<r>\d{1,3}), ?(?<g>\d{1,3}), ?(?<b>\d{1,3}), ?(?<a>\d{1,3}) ?\)$/
+  const rgbReg = /^rgb\((?<r>\d{1,3}), ?(?<g>\d{1,3}), ?(?<b>\d{1,3}) ?\)$/
+  if(hexReg.test(color)){
+    const matched = color.match(hexReg)!
+    const hex = matched[1]
 
-  return { r, g, b, a }
+    let r, g, b
+
+    if(hex.length === 3) {
+      r = Number('0x' + hex[0]) * 15
+      g = Number('0x' + hex[1]) * 15
+      b = Number('0x' + hex[2]) * 15
+    }
+    
+    if(hex.length === 6) {
+      r = Number('0x' + hex.slice(0, 2))
+      g = Number('0x' + hex.slice(2, 4))
+      b = Number('0x' + hex.slice(4, 6))
+    }
+
+    return {r, g, b, a: 255} 
+  }
+  
+  if(rgbaReg.test(color)) {
+    const matched = color.match(rgbaReg)!
+    const { r, g, b, a } = matched.groups as { r: string, g: string, b: string, a: string}
+    return {r: Number(r), g: Number(g), b: Number(b), a: Number(a)}
+  }
+
+  if(rgbReg.test(color)){
+    const matched = color.match(rgbReg)!
+    const { r, g, b } = matched.groups as { r: string, g: string, b: string}
+    return {r: Number(r), g: Number(g), b: Number(b), a: 255}
+  } 
+
+  throw new Error('Invalid color')
 }
 
 export const withStashPanelData = (fn: Function) => {

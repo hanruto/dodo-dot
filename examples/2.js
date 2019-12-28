@@ -6,6 +6,8 @@ element.height = window.innerHeight
 const dodot = window.dodot
 const panel = dodot.createPanel(element)
 
+dodot.utils.showFps()
+
 const randomNumber = dodot.utils.randomNumber
 const dotsArr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(letter =>
   dodot.createDotsFromText(letter, {
@@ -13,6 +15,7 @@ const dotsArr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(letter =>
     fontSize: randomNumber(150, 300),
     translateX: randomNumber(-100, 100),
     translateY: randomNumber(-100, 100),
+    color: { r: randomNumber(0, 255), g: randomNumber(0, 255), b: randomNumber(0, 255), a: 199 }
   })
 )
 

@@ -52,8 +52,8 @@ export const createDots = (dataInfoArr: DotInfo[]) => {
 interface CreateTextDotsOptions {
   radius?: number
   margin?: number
+  color?: string | ColorObject
   fontSize?: number
-  fontColor?: string
   translateX?: number
   translateY?: number
   translateZ?: number
@@ -69,7 +69,7 @@ interface CreateImageDotsOptions {
   translateZ?: number
 }
 
-interface GenerateDotsOptions {
+interface CreateDotFromImageDataOptions {
   data: ImageData
   radius?: number
   margin?: number
@@ -77,7 +77,7 @@ interface GenerateDotsOptions {
   translateY?: number
 }
 
-const generateDots = (options: GenerateDotsOptions) => {
+const createDotFromImageData = (options: CreateDotFromImageDataOptions) => {
   const { radius = 3, data: imageData, margin = 0 } = options
   const dots: Dot[] = []
 
@@ -107,7 +107,7 @@ const getDataFromText = (text: string, options: CreateTextDotsOptions) => {
 
   const {
     fontSize = 150,
-    fontColor = '#666',
+    color = '#666',
     translateX = 0,
     translateY = 0,
   } = options || {}
@@ -116,7 +116,7 @@ const getDataFromText = (text: string, options: CreateTextDotsOptions) => {
     text,
     panel.width / 2 + translateX,
     panel.height / 2 + translateY,
-    fontColor,
+    typeof color === 'string' ? color : transformColorObjectToColor(color),
     fontSize + 'px impact',
     'center'
   )
@@ -159,8 +159,7 @@ export const createDotsFromText = (text: string, options: CreateTextDotsOptions)
   return withStashPanelData(() => {
     const { radius, margin } = options || {}
     const data = getDataFromText(text, options)
-
-    return generateDots({ radius, margin, data })
+    return createDotFromImageData({ radius, margin, data })
   })
 }
 
@@ -168,7 +167,7 @@ export const createDotsFromImage = (image: HTMLImageElement, options: CreateImag
   return withStashPanelData(() => {
     const { radius, margin } = options
     const imageData = getDataFromImage(image, options)
-    return generateDots({ radius, margin, data: imageData })
+    return createDotFromImageData({ radius, margin, data: imageData })
   })
 }
 

@@ -11,10 +11,12 @@ image.src = './test.jpg'
 const dodot = window.dodot
 const panel = dodot.createPanel(element)
 
+dodot.utils.showFps()
+
 image.onload = async () => {
   const imageDots = dodot.createDotsFromImage(image, { imageWidth: 300, imageHeight: 300 })
-  const randomDots = dodot.createRandomDots(imageDots.length, { color: { r: 127, g: 127, b: 127, a: 255 } })
-  const textDots = dodot.createDotsFromText('I am a dog!')
+  const randomDots = dodot.createRandomDots(imageDots.length, { color: 'rgba(255, 192, 100, 180)' })
+  const textDots = dodot.createDotsFromText('I am a dog!', { color: '#f9a' })
 
   const leaveAnimation = dodot.createDotsAnimation(imageDots, randomDots, { delay: 1000 })
   const enterAnimation = dodot.createDotsAnimation(randomDots, textDots, {
