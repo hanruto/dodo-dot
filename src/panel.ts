@@ -3,6 +3,7 @@
 import global from './global'
 import Dot from './dot'
 import { transformColorObjectToColor } from './utils'
+import { Shape } from './constants'
 
 
 export default class Panel {
@@ -25,6 +26,14 @@ export default class Panel {
     this.ctx.fill()
   }
 
+  drawReact = (x, y, width, height, color) => {
+    this.ctx.beginPath()
+    this.ctx.rect(x, y, width, height)
+    this.ctx.fillStyle = color
+    this.ctx.fill()
+    this.ctx.closePath()
+  }
+
   drawText = (text: string, x: number, y: number, color: string, font?: string, align?: CanvasTextAlign) => {
     this.ctx.font = font ? font : '微软雅黑 16px'
     this.ctx.textAlign = align ? align : 'center'
@@ -44,13 +53,27 @@ export default class Panel {
 
   drawDot = (dot: Dot) => {
     const { perspective } = global
-    const { x, y, z, color, radius } = dot
+    const { x, y, color, radius, shape = Shape.ARC } = dot
+    let { z } = dot 
+    
+    if( dot.z < -1 * global.perspective) z = -199
+
     const computedColor = transformColorObjectToColor(color)
     const scale = Number((perspective / (perspective + z)).toFixed(2))
     const computedX = parseInt(Math.abs(this.width / 2 + (x - this.width / 2) * scale).toString(), 10)
     const computedY = parseInt(Math.abs(this.height / 2 + (y - this.height / 2) * scale).toString(), 10)
-
-    this.drawBall(computedX, computedY, radius * scale, computedColor)
+    
+    try {
+      if(shape === Shape.ARC) {
+        this.drawBall(computedX, computedY, radius * scale, computedColor)
+      }
+  
+      if(shape === Shape.RECT) {
+        this.drawReact(computedX, computedY, radius * scale * 2, radius * scale * 2, computedColor)
+      }
+    }catch(err){
+      console.log(`invalid dot ${JSON.stringify(dot)}`)
+    }
   }
 
   drawDots = (dots: Dot[]) => {
