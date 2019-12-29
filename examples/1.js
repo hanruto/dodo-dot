@@ -1,3 +1,6 @@
+/**
+ * 创建随机粒子，图片粒子，文字粒子
+ */
 const element = document.getElementById('panel')
 
 element.width = window.innerWidth

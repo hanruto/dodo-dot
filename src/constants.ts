@@ -29,3 +29,8 @@ export enum SupplementType {
   CONVERGENCE = 'convergence',
   CLONE = 'clone',
 }
+
+export enum Shape {
+  ARC = 'arc',
+  RECT = 'rect'
+}

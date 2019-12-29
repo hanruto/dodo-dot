@@ -3,11 +3,12 @@
  */
 
 import global from './global'
-import { ColorObject } from 'interfaces'
+import { ColorObject } from './interfaces'
 
 export function randomNumber(start: number, end: number) {
-  const i = end - start
-  const number = parseInt((start + Math.random() * i).toString(), 10)
+  const range = end - start
+  const number = parseInt((start + Math.random() * range).toString(), 10)
+  
   return number
 }
 
@@ -34,7 +35,8 @@ export function showFps() {
 
   setInterval(function () {
     const fpsValue = (1000 / (calcInterval / frameCount)).toFixed(1)
-    element.innerHTML = `${fpsValue} fps`
+    const dotsCount = global.dotsCount
+    element.innerHTML = `${dotsCount} dots; ${fpsValue} fps`
     frameCount = 0
   }, calcInterval)
 }
@@ -52,21 +54,51 @@ export function shuffle<T extends any>(arr: Array<T>): Array<T> {
   return newArr
 }
 
-export function transformColorObjectToColor(colorObject) {
+export function transformColorObjectToColor(colorObject: ColorObject) {
   const { r, g, b, a } = colorObject
   const alpha = (a / 255).toFixed(2)
+
   return `rgba(${r}, ${g}, ${b}, ${alpha})`
 }
 
-export function transformColorToColorObject(color: string): ColorObject {
+interface TransformOptions {
+  randomColorRange?: { min: number, max: number }
+}
+
+export function randomColor(color: ColorObject, randomColorRange?: { min: number, max: number }) {
+  let {r, g, b, a} = color
+  const { min = 0, max = 0 } = randomColorRange || {}
+  const range = max - min
+
+  r += parseInt((Math.random() * range + min).toString(), 10)
+  g += parseInt((Math.random() * range + min).toString(), 10)
+  b += parseInt((Math.random() * range + min).toString(), 10)
+
+  r < 0 && (r = 0)
+  g < 0 && (g = 0)
+  b < 0 && (b = 0)
+  a < 0 && (a = 0)
+  r > 255 && (r = 255)
+  g > 255 && (g = 255)
+  b > 255 && (b = 255)
+  a > 255 && (a = 255)
+
+  return { r, g, b, a }
+}
+
+export function transformColorToColorObject(color: string, options?: TransformOptions): ColorObject {
   const hexReg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/
   const rgbaReg = /^rgba\((?<r>\d{1,3}), ?(?<g>\d{1,3}), ?(?<b>\d{1,3}), ?(?<a>\d{1,3}) ?\)$/
   const rgbReg = /^rgb\((?<r>\d{1,3}), ?(?<g>\d{1,3}), ?(?<b>\d{1,3}) ?\)$/
+
+  let r = 0
+  let g = 0
+  let b = 0
+  let a = 255
+
   if(hexReg.test(color)){
     const matched = color.match(hexReg)!
     const hex = matched[1]
-
-    let r, g, b
 
     if(hex.length === 3) {
       r = Number('0x' + hex[0]) * 15
@@ -79,23 +111,34 @@ export function transformColorToColorObject(color: string): ColorObject {
       g = Number('0x' + hex.slice(2, 4))
       b = Number('0x' + hex.slice(4, 6))
     }
-
-    return {r, g, b, a: 255} 
   }
   
   if(rgbaReg.test(color)) {
     const matched = color.match(rgbaReg)!
-    const { r, g, b, a } = matched.groups as { r: string, g: string, b: string, a: string}
-    return {r: Number(r), g: Number(g), b: Number(b), a: Number(a)}
+    const groups = matched.groups as { r: string, g: string, b: string, a: string}
+
+    r = Number(groups.r)
+    g = Number(groups.g)
+    b = Number(groups.b)
+    a = Number(groups.a)
   }
 
   if(rgbReg.test(color)){
     const matched = color.match(rgbReg)!
-    const { r, g, b } = matched.groups as { r: string, g: string, b: string}
-    return {r: Number(r), g: Number(g), b: Number(b), a: 255}
+    const groups = matched.groups as { r: string, g: string, b: string}
+
+    r = Number(groups.r)
+    g = Number(groups.g)
+    b = Number(groups.b)
   } 
 
-  throw new Error('Invalid color')
+  const colorObject = { r, g, b, a }
+
+  if (options && options.randomColorRange) {
+    return randomColor(colorObject, options.randomColorRange)
+  }
+
+  return { r, g, b, a }
 }
 
 export const withStashPanelData = (fn: Function) => {

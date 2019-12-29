@@ -7,11 +7,13 @@ const DEFAULT_PERSPECTIVE = 200
 
 interface Global {
   perspective: number,
+  dotsCount: number
   panel: Panel | null
 }
 
 const global: Global = {
   perspective: DEFAULT_PERSPECTIVE,
+  dotsCount: 0,
   panel: null
 }
 
