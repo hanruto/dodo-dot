@@ -229,6 +229,17 @@ eval("/**\n * Copyright (c) 2014-present, Facebook, Inc.\n *\n * This source cod
 
 /***/ }),
 
+/***/ "./node_modules/_webpack@4.41.4@webpack/buildin/harmony-module.js":
+/*!*******************************************!*\
+  !*** (webpack)/buildin/harmony-module.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = function(originalModule) {\n\tif (!originalModule.webpackPolyfill) {\n\t\tvar module = Object.create(originalModule);\n\t\t// module.parent = undefined by default\n\t\tif (!module.children) module.children = [];\n\t\tObject.defineProperty(module, \"loaded\", {\n\t\t\tenumerable: true,\n\t\t\tget: function() {\n\t\t\t\treturn module.l;\n\t\t\t}\n\t\t});\n\t\tObject.defineProperty(module, \"id\", {\n\t\t\tenumerable: true,\n\t\t\tget: function() {\n\t\t\t\treturn module.i;\n\t\t\t}\n\t\t});\n\t\tObject.defineProperty(module, \"exports\", {\n\t\t\tenumerable: true\n\t\t});\n\t\tmodule.webpackPolyfill = 1;\n\t}\n\treturn module;\n};\n\n\n//# sourceURL=webpack:///(webpack)/buildin/harmony-module.js?");
+
+/***/ }),
+
 /***/ "./src/animation.ts":
 /*!**************************!*\
   !*** ./src/animation.ts ***!
@@ -281,11 +292,11 @@ eval("__webpack_require__.r(__webpack_exports__);\n/**\n * 保存一些环境变
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/*! exports provided: default */
+/*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _panel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./panel */ \"./src/panel.ts\");\n/* harmony import */ var _dot__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dot */ \"./src/dot.ts\");\n/* harmony import */ var _animation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./animation */ \"./src/animation.ts\");\n/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils */ \"./src/utils.ts\");\n\n\n\n\nvar dodot = {\n  createPanel: _panel__WEBPACK_IMPORTED_MODULE_0__[\"createPanel\"],\n  createDot: _dot__WEBPACK_IMPORTED_MODULE_1__[\"createDot\"],\n  createDots: _dot__WEBPACK_IMPORTED_MODULE_1__[\"createDots\"],\n  createRandomDot: _dot__WEBPACK_IMPORTED_MODULE_1__[\"createRandomDot\"],\n  createRandomDots: _dot__WEBPACK_IMPORTED_MODULE_1__[\"createRandomDots\"],\n  createDotsFromText: _dot__WEBPACK_IMPORTED_MODULE_1__[\"createDotsFromText\"],\n  createDotsFromImage: _dot__WEBPACK_IMPORTED_MODULE_1__[\"createDotsFromImage\"],\n  createDotsAnimation: _animation__WEBPACK_IMPORTED_MODULE_2__[\"createDotsAnimation\"],\n  createMutiSegmentDotsAnimation: _animation__WEBPACK_IMPORTED_MODULE_2__[\"createMutiSegmentDotsAnimation\"],\n  utils: _utils__WEBPACK_IMPORTED_MODULE_3__\n}; // @ts-ignore\n\nwindow.dodot = dodot;\n/* harmony default export */ __webpack_exports__[\"default\"] = (dodot);\n\n//# sourceURL=webpack:///./src/index.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* WEBPACK VAR INJECTION */(function(module) {/* harmony import */ var _panel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./panel */ \"./src/panel.ts\");\n/* harmony import */ var _dot__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dot */ \"./src/dot.ts\");\n/* harmony import */ var _animation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./animation */ \"./src/animation.ts\");\n/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils */ \"./src/utils.ts\");\n\n\n\n\nvar dodot = {\n  createPanel: _panel__WEBPACK_IMPORTED_MODULE_0__[\"createPanel\"],\n  createDot: _dot__WEBPACK_IMPORTED_MODULE_1__[\"createDot\"],\n  createDots: _dot__WEBPACK_IMPORTED_MODULE_1__[\"createDots\"],\n  createRandomDot: _dot__WEBPACK_IMPORTED_MODULE_1__[\"createRandomDot\"],\n  createRandomDots: _dot__WEBPACK_IMPORTED_MODULE_1__[\"createRandomDots\"],\n  createDotsFromText: _dot__WEBPACK_IMPORTED_MODULE_1__[\"createDotsFromText\"],\n  createDotsFromImage: _dot__WEBPACK_IMPORTED_MODULE_1__[\"createDotsFromImage\"],\n  createDotsAnimation: _animation__WEBPACK_IMPORTED_MODULE_2__[\"createDotsAnimation\"],\n  createMutiSegmentDotsAnimation: _animation__WEBPACK_IMPORTED_MODULE_2__[\"createMutiSegmentDotsAnimation\"],\n  utils: _utils__WEBPACK_IMPORTED_MODULE_3__\n}; // @ts-ignore\n\nwindow.dodot = dodot;\nmodule.exports = {\n  a: 1,\n  b: 2\n};\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../node_modules/_webpack@4.41.4@webpack/buildin/harmony-module.js */ \"./node_modules/_webpack@4.41.4@webpack/buildin/harmony-module.js\")(module)))\n\n//# sourceURL=webpack:///./src/index.ts?");
 
 /***/ }),
 
