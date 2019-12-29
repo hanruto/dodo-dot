@@ -87,10 +87,11 @@ const animtion = createDotsAnimation(fromDots, toDots, {
 
 ``` js
 const animtion = createMutiSegmentDotsAnimation([ dotsArr ], {
-  tweenType: 'Bounce', // default: Sine
-  totalFrame: 60, // default: 60
-  supplementType: 'clone', // default: convergence
   delay: 0, // default: 0
+  totalFrame: 60, // default: 60
+  tweenType: 'Bounce', // default: Sine 参考后边的补充说明
+  supplementType: 'clone', // default: convergence 参考后边的补充说明
+  
 })
 ```
 
@@ -106,7 +107,8 @@ animation.continue()
 
 # 补充说明
 
-### 粒子过渡 
+### 粒子过渡 tweenType
+
 粒子的过渡变化使用 Tween.js，可以自行搜索了解。
 过度的动画类型有  
 - Quad
@@ -120,11 +122,10 @@ animation.continue()
 - Back
 - Bounce
 
-### 粒子补充
+### 粒子补充 supplementType
 
 粒子补充指的是当 formDots 和 toDots 的数量不同的时候，需要补充粒子才能进行过渡，主要有三种形式
 
 - 发散（divergence），从尽量大的区域生成点，一般指的3倍的屏幕尺寸的大小范围  
 - 收敛（convergence），从尽量小的区域生成点，一般指的图像所在的区域范围  
 - 拷贝（clone），从源点数组中随机抽取点进行拷贝
-
