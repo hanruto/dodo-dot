@@ -35,7 +35,6 @@ interface CreateImageDotsOptions extends CreateDotsOption{
 }
 
 interface CreateDotFromImageDataOptions extends CreateDotsOption{
-  data: ImageData
   margin?: number
 }
 
@@ -76,7 +75,7 @@ const getDataFromText = (text: string, options: CreateTextDotsOptions) => {
   panel.drawText(
     text,
     panel.width / 2 + translateX,
-    panel.height / 2 + translateY,
+    panel.height / 2 + translateY + fontSize / 3,
     typeof color === 'string' ? color : transformColorObjectToColor(color),
     fontSize + 'px impact',
     'center'
@@ -160,8 +159,8 @@ export const createDots = (dataInfoArr: DotInfo[]) => {
   return dataInfoArr.map((dotInfo) => new Dot(dotInfo))
 }
 
-export const createDotFromImageData = (options: CreateDotFromImageDataOptions) => {
-  const { radius = 3, data: imageData, margin = 0, randomColorRange, shape } = options
+export const createDotFromImageData = (imageData, options: CreateDotFromImageDataOptions) => {
+  const { radius = 3, margin = 0, randomColorRange, shape } = options
   const dots: Dot[] = []
 
   const interval = (radius + margin) * 2
@@ -192,17 +191,15 @@ export const createDotFromImageData = (options: CreateDotFromImageDataOptions) =
 
 export const createDotsFromText = (text: string, options: CreateTextDotsOptions): Dot[] => {
   return withStashPanelData(() => {
-    const { radius, margin, shape, randomColorRange } = options || {}
     const data = getDataFromText(text, options)
-    return createDotFromImageData({ radius, margin, data, shape, randomColorRange })
+    return createDotFromImageData(data, options)
   })
 }
 
 export const createDotsFromImage = (image: HTMLImageElement, options: CreateImageDotsOptions): Dot[] => {
   return withStashPanelData(() => {
-    const { radius, margin } = options
     const imageData = getDataFromImage(image, options)
-    return createDotFromImageData({ radius, margin, data: imageData })
+    return createDotFromImageData(imageData, options)
   })
 }
 
