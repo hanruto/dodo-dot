@@ -1,35 +1,23 @@
-## 原理
+dodo-dot是一个快速创建粒子动画的工具，可以非常简单的创建炫酷好玩的粒子动画效果。
 
-给定一个点可以到另外一个点以特定的函数运动
+demo: https://hanruto.github.io/dodo-dot/examples/3.html
 
-``` js
-const fromDot = { x: 0, y: 0 }
-const toDot = { x: 100, y: 100 }
-const animation = createDotAnimation(dot, newDot)
+# Installation
 
-animation.start()
+``` sh
+$ yarn add dodo-dot
 ```
 
-同理给定一组点可以到另外一组点以特定的函数运动
-
-``` js
-const fromDots = [{ x: 0, y: 0 }, { x: 0, y: 10 }, { x: 0, y: 20 }]
-const toDots = [{ x: 100, y: 100 }, { x: 100, y: 110 }, { x: 100, y: 120 }]
-const animation = createDotsAnimation(fromDots, toDots)
-
-animation.start()
-```
-
-dodot 就是控制一些点朝着另外一些点进行变化的一个工具
-
-## Get Start
+# Get Start
 
 ### STEP1  
 
 在创建点和动画之前需要先制定一个canvas元素，这个panel是后边创建dot和animation所必须的
 
 ``` js
-const panel = createPanel(canvas)
+import dodot from 'dodo-dot'
+
+const panel = dodot.createPanel(canvas)
 ```
 
 ### STEP 2  
@@ -116,7 +104,9 @@ animation.stop()
 animation.continue()
 ```
 
-### 粒子过渡
+# 补充说明
+
+### 粒子过渡 
 粒子的过渡变化使用 Tween.js，可以自行搜索了解。
 过度的动画类型有  
 - Quad

@@ -1,7 +1,7 @@
 {
-  "name": "dodo-particle",
+  "name": "dodo-dot",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev:watch": "browser-sync start --server --watch './examples/*'",
     "build:watch": "webpack --config ./config/webpack.config.dev.js",

@@ -66,7 +66,7 @@ export default class Panel {
         this.drawReact(computedX, computedY, radius * scale * 2, radius * scale * 2, computedColor)
       }
     }catch(err){
-      console.log(`invalid dot ${JSON.stringify(dot)}`)
+      console.log(`invalid dot ${JSON.stringify(dot)}`) // eslint-disable-line
     }
   }
 
@@ -75,7 +75,7 @@ export default class Panel {
   }
 
   clear = () => {
-    this.canvas.width = this.canvas.width
+    this.canvas.width = this.width
   }
 }
 
