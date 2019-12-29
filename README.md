@@ -115,8 +115,10 @@ animation.run()
 animation.stop()
 animation.continue()
 ```
+## 粒子的过度和补充
 
-### 粒子过渡
+### 粒子过渡 tweenType
+
 粒子的过渡变化使用 Tween.js，可以自行搜索了解。
 过度的动画类型有  
 - Quad
@@ -130,7 +132,7 @@ animation.continue()
 - Back
 - Bounce
 
-### 粒子补充
+### 粒子补充 supplementType
 
 粒子补充指的是当 formDots 和 toDots 的数量不同的时候，需要补充粒子才能进行过渡，主要有三种形式
 
