@@ -1,6 +1,6 @@
 {
   "name": "dodo-dot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/index.js",
   "scripts": {
     "dev:watch": "browser-sync start --server --watch './examples/*'",
