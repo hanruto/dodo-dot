@@ -115,6 +115,9 @@ animation.run()
 animation.stop()
 animation.continue()
 ```
+
+以上四步就能快速的创建一个粒子动画效果了，需要了解更多的同学可以看/examples文件下的一些demo
+
 ## 粒子的过度和补充
 
 ### 粒子过渡 tweenType
@@ -139,4 +142,3 @@ animation.continue()
 - 发散（divergence），从尽量大的区域生成点，一般指的3倍的屏幕尺寸的大小范围  
 - 收敛（convergence），从尽量小的区域生成点，一般指的图像所在的区域范围  
 - 拷贝（clone），从源点数组中随机抽取点进行拷贝
-
