@@ -8,7 +8,7 @@ module.exports = Object.assign(devConfig, {
     filename: 'index.js',
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/',
-    library: 'beta',
+    library: 'dodot',
     libraryTarget: 'umd',
   },
 })
