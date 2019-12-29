@@ -3,7 +3,7 @@
  */
 
 import global from './global'
-import { ColorObject } from 'interfaces'
+import { ColorObject } from './interfaces'
 
 export function randomNumber(start: number, end: number) {
   const i = end - start
@@ -52,9 +52,17 @@ export function shuffle<T extends any>(arr: Array<T>): Array<T> {
   return newArr
 }
 
-export function transformColorObjectToColor(colorObject) {
-  const { r, g, b, a } = colorObject
+export function transformColorObjectToColor(colorObject: ColorObject, options?: { randomNumber: number}) {
+  let { r, g, b, a } = colorObject
   const alpha = (a / 255).toFixed(2)
+
+  if(options && options.randomNumber) {
+    const { randomNumber } = options
+    r += parseInt((Math.random() * randomNumber - randomNumber / 2).toString(), 10)
+    g += parseInt((Math.random() * randomNumber - randomNumber / 2).toString(), 10)
+    b += parseInt((Math.random() * randomNumber - randomNumber / 2).toString(), 10)
+  }
+
   return `rgba(${r}, ${g}, ${b}, ${alpha})`
 }
 
