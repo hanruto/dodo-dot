@@ -35,7 +35,8 @@ export function showFps() {
 
   setInterval(function () {
     const fpsValue = (1000 / (calcInterval / frameCount)).toFixed(1)
-    element.innerHTML = `${fpsValue} fps`
+    const dotsCount = global.dotsCount
+    element.innerHTML = `${dotsCount} dots; ${fpsValue} fps`
     frameCount = 0
   }, calcInterval)
 }

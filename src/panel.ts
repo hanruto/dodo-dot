@@ -45,12 +45,6 @@ export default class Panel {
     this.ctx.drawImage(image, x, y, width, height)
   }
 
-  clear = (x?: number, y?: number) => {
-    const cx = x ? x : this.width
-    const cy = y ? y : this.height
-    this.ctx.clearRect(0, 0, cx, cy)
-  }
-
   drawDot = (dot: Dot) => {
     const { perspective } = global
     const { x, y, color, radius, shape = Shape.ARC } = dot
@@ -78,6 +72,10 @@ export default class Panel {
 
   drawDots = (dots: Dot[]) => {
     dots.forEach(dot => this.drawDot(dot))
+  }
+
+  clear = () => {
+    this.canvas.width = this.canvas.width
   }
 }
 

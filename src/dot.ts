@@ -160,7 +160,7 @@ export const createDots = (dataInfoArr: DotInfo[]) => {
 }
 
 export const createDotFromImageData = (imageData, options: CreateDotFromImageDataOptions) => {
-  const { radius = 3, margin = 0, randomColorRange, shape } = options
+  const { radius = defaultDotRadius, margin = 0, randomColorRange, shape } = options
   const dots: Dot[] = []
 
   const interval = (radius + margin) * 2

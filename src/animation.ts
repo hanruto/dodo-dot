@@ -26,6 +26,8 @@ export const createDotsAnimation = (fromDots: Dot[], toDots: Dot[] = [], options
 
   // 补充策略
   const dotsCount = Math.max(fromDots.length, toDots.length)
+  
+  global.dotsCount = dotsCount
 
   if (!fromDots.length) {
     fromDots = createRandomDots(dotsCount)
