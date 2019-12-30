@@ -37,36 +37,13 @@ const dots = createDots([ dotInfo, dotInfo, dotInfo ])
 
 ``` js
 // 随机创建1000个dot
-const randomDots = createRandomDots(1000, {
-  color: '#39f', // default: 'rgba(255, 255, 255, 0)
-  radius: 5, // default: 5
-  margin: 0, // default: 0
-  translateX: 0, // default: 0
-  translateY: 0, // default: 0
-  randomColorRange: { min: 0, max: 0}, // default: { min: 0, max: 0 }
-}) 
+const randomDots = createRandomDots(1000) 
 
 // 创建排列成文字形状的dot
-const textDots = createDotsFromText('Hello World', {
-  fontSize: 200, // default: #150
-  color: '#39f', // default: #666
-  radius: 5, // default: 5
-  margin: 0, // default: 0
-  translateX: 0, // default: 0
-  translateY: 0, // default: 0
-  randomColorRange: { min: 0, max: 0}, // default: { min: 0, max: 0 }
-})
+const textDots = createDotsFromText('Hello World')
 
 // 创建排列成图片形状的dot
-const imageDots = createDotsFromImage(image, {
-  imageWidth: 300, // default: image.height
-  imageHeight: 300, // default: image.width
-  radius: 5, // default: 5
-  margin: 0, // default: 0
-  translateX: 0, // default: 0
-  translateY: 0, // default: 0
-  randomColorRange: { min: 0, max: 0}, // default: { min: 0, max: 0 }
-})
+const imageDots = createDotsFromImage(image)
 ```
 
 ### STEP 3
@@ -74,25 +51,14 @@ const imageDots = createDotsFromImage(image, {
 通过下边的方式可以创建一个动画
 
 ``` js
-const animtion = createDotsAnimation(fromDots, toDots, {
-  tweenType: 'Bounce', // default: Sine
-  totalFrame: 60, // default: 60
-  supplementType: 'clone', // default: convergence
-  delay: 0, // default: 0
-})
+const animtion = createDotsAnimation(fromDots, toDots)
 
 ```
 
 创建连续的动画可以通过
 
 ``` js
-const animtion = createMutiSegmentDotsAnimation([ dotsArr ], {
-  delay: 0, // default: 0
-  totalFrame: 60, // default: 60
-  tweenType: 'Bounce', // default: Sine 参考后边的补充说明
-  supplementType: 'clone', // default: convergence 参考后边的补充说明
-  
-})
+const animtion = createMutiSegmentDotsAnimation([ dotsArr ])
 ```
 
 ### STEP 4
@@ -105,27 +71,72 @@ animation.stop()
 animation.continue()
 ```
 
-# 补充说明
+# API
+### 常用的接口主要有  
 
-### 粒子过渡 tweenType
+createPanel(canvasElement)
 
-粒子的过渡变化使用 Tween.js，可以自行搜索了解。
-过度的动画类型有  
-- Quad
-- Cubic
-- Quart
-- Quint
-- Sine
-- Expo
-- Circ
-- Elastic
-- Back
-- Bounce
+createDots(dotsInfo)
+createRandomDots(dotsCount, [createDotsOptions])
+createDotsFromText(text, [createDotsOptions])
+createDotsFromImage(image, [createDotsOptions])
 
-### 粒子补充 supplementType
+createDotsAnimation(fromDots, toDots, [createAnimationOptions])
+createMutiSegmentAnimation(dotsArr, [createAnimationOptions])
 
-粒子补充指的是当 formDots 和 toDots 的数量不同的时候，需要补充粒子才能进行过渡，主要有三种形式
+animation.run()
+animation.stop()
+animation.continue()
 
-- 发散（divergence），从尽量大的区域生成点，一般指的3倍的屏幕尺寸的大小范围  
-- 收敛（convergence），从尽量小的区域生成点，一般指的图像所在的区域范围  
-- 拷贝（clone），从源点数组中随机抽取点进行拷贝
+### 参数
+
+#### createDotsOptions
+- color 粒子颜色，默认值 #666
+- radius 粒子半径，默认值5
+- randomColorRange 颜色随机偏移，默认值 { min: 0, max: 0 }
+- shape 形状，默认值 arc, 支持 rect 和 arc，颜色随机偏移配合rect形状可以产生马赛克效果
+
+创建随机粒子额外的参数
+- xRange 随机x的范围，默认值 { min: -panel.width, max: 2 * panel.width }
+- xRange 随机x的范围，默认值 { min: -panel.width, max: 2 * panel.width }
+- xRange 随机x的范围，默认值 { min: -panel.width, max: 2 * panel.width }
+
+创建文字粒子额外的参数
+- translateX x偏移，默认值 0
+- translateY y偏移，默认值 0
+- margin 粒子间距，默认值 0
+- fontSize 文字大小，默认值 150
+
+创建图片粒子额外的参数
+- translateX x偏移，默认值 0
+- translateY y偏移，默认值 0
+- margin 粒子间距，默认值 0
+- imageWidth 图片宽度，默认值 image.height
+- imageHeight 图片高度，默认值 image.width
+
+#### createAnimationOptions
+
+- delay 动画延迟时间，默认值 0
+- totalFrame 动画总帧数，默认值 60
+- tweenType 粒子过渡方式，默认值 Sine
+
+  粒子的过渡变化使用 tween.js，可以自行搜索了解。  
+  过度的动画类型有  
+  - Quad
+  - Cubic
+  - Quart
+  - Quint
+  - Sine
+  - Expo
+  - Circ
+  - Elastic
+  - Back
+  - Bounce
+
+- supplementType 粒子补充方式，默认值 convergence
+
+  粒子补充指的是当 formDots 和 toDots 的数量不同的时候，需要补充粒子才能进行过渡，主要有三种形式
+  
+  - convergence，从尽量小的区域生成点，一般指的图像所在的区域范围  
+  - divergence，从尽量大的区域生成点，一般指的3倍的屏幕尺寸的大小范围  
+  - clone，从源点数组中随机抽取点进行拷贝
