@@ -74,19 +74,19 @@ animation.continue()
 # API
 ### 常用的接口主要有  
 
-createPanel(canvasElement)
+createPanel(canvasElement)  
 
-createDots(dotsInfo)
-createRandomDots(dotsCount, [createDotsOptions])
-createDotsFromText(text, [createDotsOptions])
-createDotsFromImage(image, [createDotsOptions])
+createDots(dotsInfo)  
+createRandomDots(dotsCount, [createDotsOptions])  
+createDotsFromText(text, [createDotsOptions])  
+createDotsFromImage(image, [createDotsOptions])  
+ 
+createDotsAnimation(fromDots, toDots, [createAnimationOptions])  
+createMutiSegmentAnimation(dotsArr, [createAnimationOptions])  
 
-createDotsAnimation(fromDots, toDots, [createAnimationOptions])
-createMutiSegmentAnimation(dotsArr, [createAnimationOptions])
-
-animation.run()
-animation.stop()
-animation.continue()
+animation.run()  
+animation.stop()  
+animation.continue()  
 
 ### 参数
 
