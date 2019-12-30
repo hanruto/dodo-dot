@@ -1,3 +1,4 @@
+![logo](https://static.justdodo.cn/xiaohan/feaa869ba464e48bd9341f318842b74295717b66.png)
 dodo-dot是一个快速创建粒子动画的工具，可以非常简单的创建炫酷好玩的粒子动画效果。
 
 demo: https://hanruto.github.io/dodo-dot/examples/3.html
