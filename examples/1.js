@@ -1,3 +1,6 @@
+/**
+ * 创建随机粒子，图片粒子，文字粒子
+ */
 const element = document.getElementById('panel')
 
 element.width = window.innerWidth
@@ -11,23 +14,20 @@ image.src = './test.jpg'
 const dodot = window.dodot
 const panel = dodot.createPanel(element)
 
-const sleep = (time) => new Promise(resolve => setTimeout(resolve, time))
+dodot.utils.showFps()
 
 image.onload = async () => {
+  const imageDots = dodot.createDotsFromImage(image, { imageWidth: 300, imageHeight: 300 })
+  const randomDots = dodot.createRandomDots(imageDots.length, { color: 'rgba(255, 192, 100, 180)' })
+  const textDots = dodot.createDotsFromText('I am a dog!', { color: '#f9a' })
 
-  const dots = dodot.createDotsFromImage(image, { imageWidth: 400, imageHeight: 400, radius: 10, margin: 3 })
-  const randomDots = dodot.createRandomDots(dots.length, { color: { r: 0, g: 0, b: 0, a: 127 } })
+  const leaveAnimation = dodot.createDotsAnimation(imageDots, randomDots, { delay: 1000 })
+  const enterAnimation = dodot.createDotsAnimation(randomDots, textDots, {
+    delay: 100,
+    supplementType: 'clone',
+    tweenType: 'Bounce',
+  })
 
-  panel.drawDots(dots)
-
-  await sleep(1000)
-
-  const animation = dodot.createDotsAnimation(dots, randomDots)
-
-  await animation.run()
-
-  const textDots = dodot.createDotsFromText('I am a Dog')
-  const newAnimation = dodot.createDotsAnimation(randomDots, textDots)
-
-  await newAnimation.run()
+  await leaveAnimation.run()
+  await enterAnimation.run()
 }

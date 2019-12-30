@@ -13,6 +13,8 @@ export interface DotInfo {
   x: number
   y: number
   z: number
-  radius: number
   color: string | ColorObject
+  radius?: number
+  shape?: string
+  randomColorRange?: { min: number, max: number }
 }
