@@ -74,6 +74,7 @@ animation.continue()
 # API
 ### 常用的接口主要有  
 
+``` js
 createPanel(canvasElement)  
 
 createDots(dotsInfo)  
@@ -87,6 +88,8 @@ createMutiSegmentAnimation(dotsArr, [createAnimationOptions])
 animation.run()  
 animation.stop()  
 animation.continue()  
+
+```
 
 ### 参数
 
