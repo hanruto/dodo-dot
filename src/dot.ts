@@ -60,7 +60,7 @@ function getLimitFromDots(dots: Dot[]) {
   return { maxX, maxY, minX, minY }
 }
 
-const getDataFromText = (text: string, options: CreateTextDotsOptions) => {
+const getDataFromText = (text: string, options?: CreateTextDotsOptions) => {
   const panel = global.panel!
 
   panel.clear()
@@ -88,7 +88,7 @@ const getDataFromText = (text: string, options: CreateTextDotsOptions) => {
   return imageData
 }
 
-const getDataFromImage = (image: HTMLImageElement, options: CreateImageDotsOptions) => {
+const getDataFromImage = (image: HTMLImageElement, options?: CreateImageDotsOptions) => {
   const panel = global.panel!
 
   panel.clear()
@@ -159,8 +159,8 @@ export const createDots = (dataInfoArr: DotInfo[]) => {
   return dataInfoArr.map((dotInfo) => new Dot(dotInfo))
 }
 
-export const createDotFromImageData = (imageData, options: CreateDotFromImageDataOptions) => {
-  const { radius = defaultDotRadius, margin = 0, randomColorRange, shape } = options
+export const createDotFromImageData = (imageData, options?: CreateDotFromImageDataOptions) => {
+  const { radius = defaultDotRadius, margin = 0, randomColorRange, shape } = options || {}
   const dots: Dot[] = []
 
   const interval = (radius + margin) * 2
@@ -189,14 +189,14 @@ export const createDotFromImageData = (imageData, options: CreateDotFromImageDat
   return shuffle(dots)
 }
 
-export const createDotsFromText = (text: string, options: CreateTextDotsOptions): Dot[] => {
+export const createDotsFromText = (text: string, options?: CreateTextDotsOptions): Dot[] => {
   return withStashPanelData(() => {
     const data = getDataFromText(text, options)
     return createDotFromImageData(data, options)
   })
 }
 
-export const createDotsFromImage = (image: HTMLImageElement, options: CreateImageDotsOptions): Dot[] => {
+export const createDotsFromImage = (image: HTMLImageElement, options?: CreateImageDotsOptions): Dot[] => {
   return withStashPanelData(() => {
     const imageData = getDataFromImage(image, options)
     return createDotFromImageData(imageData, options)

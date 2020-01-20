@@ -1,35 +1,25 @@
-## 原理
+<img src="https://static.justdodo.cn/xiaohan/feaa869ba464e48bd9341f318842b74295717b66.png" width="50%">
 
-给定一个点可以到另外一个点以特定的函数运动
+dodo-dot是一个快速创建粒子动画的工具，可以非常简单的创建炫酷好玩的粒子动画效果。
 
-``` js
-const fromDot = { x: 0, y: 0 }
-const toDot = { x: 100, y: 100 }
-const animation = createDotAnimation(dot, newDot)
+demo: https://hanruto.github.io/dodo-dot/examples/3.html
 
-animation.start()
+# Installation
+
+``` sh
+$ yarn add dodo-dot
 ```
 
-同理给定一组点可以到另外一组点以特定的函数运动
-
-``` js
-const fromDots = [{ x: 0, y: 0 }, { x: 0, y: 10 }, { x: 0, y: 20 }]
-const toDots = [{ x: 100, y: 100 }, { x: 100, y: 110 }, { x: 100, y: 120 }]
-const animation = createDotsAnimation(fromDots, toDots)
-
-animation.start()
-```
-
-dodot 就是控制一些点朝着另外一些点进行变化的一个工具
-
-## Get Start
+# Get Start
 
 ### STEP1  
 
 在创建点和动画之前需要先制定一个canvas元素，这个panel是后边创建dot和animation所必须的
 
 ``` js
-const panel = createPanel(canvas)
+import dodot from 'dodo-dot'
+
+const panel = dodot.createPanel(canvas)
 ```
 
 ### STEP 2  
@@ -49,36 +39,13 @@ const dots = createDots([ dotInfo, dotInfo, dotInfo ])
 
 ``` js
 // 随机创建1000个dot
-const randomDots = createRandomDots(1000, {
-  color: '#39f', // default: 'rgba(255, 255, 255, 0)
-  radius: 5, // default: 5
-  margin: 0, // default: 0
-  translateX: 0, // default: 0
-  translateY: 0, // default: 0
-  randomColorRange: { min: 0, max: 0}, // default: { min: 0, max: 0 }
-}) 
+const randomDots = createRandomDots(1000) 
 
 // 创建排列成文字形状的dot
-const textDots = createDotsFromText('Hello World', {
-  fontSize: 200, // default: #150
-  color: '#39f', // default: #666
-  radius: 5, // default: 5
-  margin: 0, // default: 0
-  translateX: 0, // default: 0
-  translateY: 0, // default: 0
-  randomColorRange: { min: 0, max: 0}, // default: { min: 0, max: 0 }
-})
+const textDots = createDotsFromText('Hello World')
 
 // 创建排列成图片形状的dot
-const imageDots = createDotsFromImage(image, {
-  imageWidth: 300, // default: image.height
-  imageHeight: 300, // default: image.width
-  radius: 5, // default: 5
-  margin: 0, // default: 0
-  translateX: 0, // default: 0
-  translateY: 0, // default: 0
-  randomColorRange: { min: 0, max: 0}, // default: { min: 0, max: 0 }
-})
+const imageDots = createDotsFromImage(image)
 ```
 
 ### STEP 3
@@ -86,24 +53,14 @@ const imageDots = createDotsFromImage(image, {
 通过下边的方式可以创建一个动画
 
 ``` js
-const animtion = createDotsAnimation(fromDots, toDots, {
-  tweenType: 'Bounce', // default: Sine
-  totalFrame: 60, // default: 60
-  supplementType: 'clone', // default: convergence
-  delay: 0, // default: 0
-})
+const animtion = createDotsAnimation(fromDots, toDots)
 
 ```
 
 创建连续的动画可以通过
 
 ``` js
-const animtion = createMutiSegmentDotsAnimation([ dotsArr ], {
-  tweenType: 'Bounce', // default: Sine
-  totalFrame: 60, // default: 60
-  supplementType: 'clone', // default: convergence
-  delay: 0, // default: 0
-})
+const animtion = createMutiSegmentDotsAnimation([ dotsArr ])
 ```
 
 ### STEP 4
@@ -116,29 +73,75 @@ animation.stop()
 animation.continue()
 ```
 
-以上四步就能快速的创建一个粒子动画效果了，需要了解更多的同学可以看/examples文件下的一些demo
+# API
+### 常用的接口主要有  
 
-## 粒子的过度和补充
+``` js
+createPanel(canvasElement)  
 
-### 粒子过渡 tweenType
+createDots(dotsInfo)  
+createRandomDots(dotsCount, [createDotsOptions])  
+createDotsFromText(text, [createDotsOptions])  
+createDotsFromImage(image, [createDotsOptions])  
+ 
+createDotsAnimation(fromDots, toDots, [createAnimationOptions])  
+createMutiSegmentAnimation(dotsArr, [createAnimationOptions])  
 
-粒子的过渡变化使用 Tween.js，可以自行搜索了解。
-过度的动画类型有  
-- Quad
-- Cubic
-- Quart
-- Quint
-- Sine
-- Expo
-- Circ
-- Elastic
-- Back
-- Bounce
+animation.run()  
+animation.stop()  
+animation.continue()  
 
-### 粒子补充 supplementType
+```
 
-粒子补充指的是当 formDots 和 toDots 的数量不同的时候，需要补充粒子才能进行过渡，主要有三种形式
+### 参数
 
-- 发散（divergence），从尽量大的区域生成点，一般指的3倍的屏幕尺寸的大小范围  
-- 收敛（convergence），从尽量小的区域生成点，一般指的图像所在的区域范围  
-- 拷贝（clone），从源点数组中随机抽取点进行拷贝
+#### createDotsOptions
+- color 粒子颜色，默认值 #666
+- radius 粒子半径，默认值5
+- randomColorRange 颜色随机偏移，默认值 { min: 0, max: 0 }
+- shape 形状，默认值 arc, 支持 rect 和 arc，颜色随机偏移配合rect形状可以产生马赛克效果
+
+创建随机粒子额外的参数
+- xRange 随机x的范围，默认值 { min: -panel.width, max: 2 * panel.width }
+- xRange 随机x的范围，默认值 { min: -panel.width, max: 2 * panel.width }
+- xRange 随机x的范围，默认值 { min: -panel.width, max: 2 * panel.width }
+
+创建文字粒子额外的参数
+- translateX x偏移，默认值 0
+- translateY y偏移，默认值 0
+- margin 粒子间距，默认值 0
+- fontSize 文字大小，默认值 150
+
+创建图片粒子额外的参数
+- translateX x偏移，默认值 0
+- translateY y偏移，默认值 0
+- margin 粒子间距，默认值 0
+- imageWidth 图片宽度，默认值 image.height
+- imageHeight 图片高度，默认值 image.width
+
+#### createAnimationOptions
+
+- delay 动画延迟时间，默认值 0
+- totalFrame 动画总帧数，默认值 60
+- tweenType 粒子过渡方式，默认值 Sine
+
+  粒子的过渡变化使用 tween.js，可以自行搜索了解。  
+  过度的动画类型有  
+  - Quad
+  - Cubic
+  - Quart
+  - Quint
+  - Sine
+  - Expo
+  - Circ
+  - Elastic
+  - Back
+  - Bounce
+
+- supplementType 粒子补充方式，默认值 convergence
+
+  粒子补充指的是当 formDots 和 toDots 的数量不同的时候，需要补充粒子才能进行过渡，主要有三种形式
+  
+  - convergence，从尽量小的区域生成点，一般指的图像所在的区域范围  
+  - divergence，从尽量大的区域生成点，一般指的3倍的屏幕尺寸的大小范围  
+  - clone，从源点数组中随机抽取点进行拷贝
